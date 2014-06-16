@@ -94,31 +94,10 @@ char* forza__json_stringify_string(char* string) {
   return out;
 }
 
-char* forza__json_stringify_meta_app(forza_metric_meta_app_t* app) {
-  char* json = malloc(2);
-  char* buf;
-
-  json[0] = '{';
-  json[1] = '\0';
-
-  buf = forza__json_stringify_string(app->user);
-  forza__json_append(&json, "user", buf, 0);
-  free(buf);
-
-  buf = forza__json_stringify_string(app->name);
-  forza__json_append(&json, "name", buf, 1);
-  free(buf);
-
-  json = realloc(json, strlen(json) + 2);
-  strncat(json, "}", 1);
-
-  return json;
-}
-
 char* forza__json_stringify_meta(forza_metric_meta_t* meta) {
   char* json = malloc(2);
-  char* app;
   char buf[128];
+  char* str_buf;
   int first = 0;
 
   json[0] = '{';
@@ -134,10 +113,10 @@ char* forza__json_stringify_meta(forza_metric_meta_t* meta) {
     forza__json_append(&json, "port", buf, first++);
   }
 
-  if (meta->app->user != NULL && meta->app->name != NULL) {
-    app = forza__json_stringify_meta_app(meta->app);
-    forza__json_append(&json, "app", app, first++);
-    free(app);
+  if (meta->app != NULL) {
+    str_buf = forza__json_stringify_string(meta->app);
+    forza__json_append(&json, "app", str_buf, first++);
+    free(str_buf);
   }
 
   json = realloc(json, strlen(json) + 2);

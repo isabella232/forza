@@ -16,8 +16,7 @@ static uv_connect_t connect_req;
 static struct addrinfo* first_host;
 static struct addrinfo* host;
 static int port;
-static char* user = NULL;
-static char* name = NULL;
+static char* app = NULL;
 
 void forza__reconnect(forza_connect_cb connect_cb);
 void forza__on_connect(uv_connect_t* req, int status);
@@ -65,7 +64,7 @@ void forza__reconnect(forza_connect_cb connect_cb) {
   }
 }
 
-void forza_connect(char* host_, int port_, char* hostname_, char* user_, char* name_, forza_connect_cb connect_cb) {
+void forza_connect(char* host_, int port_, char* hostname_, char* app_, forza_connect_cb connect_cb) {
   struct addrinfo hints;
   struct addrinfo* t;
   int r, count, random;
@@ -73,9 +72,8 @@ void forza_connect(char* host_, int port_, char* hostname_, char* user_, char* n
 
   loop = uv_default_loop();
 
-  /* set user and app name to be used in metric if they exist */
-  user = user_;
-  name = name_;
+  /* set app name to be used in metric if it exists */
+  app = app_;
   /* Get the hostname so that it can be provided to the server */
   hostname = hostname_;
   port = port_;
@@ -163,16 +161,12 @@ forza_metric_t* forza_new_metric() {
 
   metric->meta->uptime = (long long int) - 1;
   metric->meta->port = (unsigned short) - 1;
-
-  metric->meta->app = malloc(sizeof(forza_metric_meta_app_t));
-  metric->meta->app->user = user ? user : NULL;
-  metric->meta->app->name = name ? name : NULL;
+  metric->meta->app = app;
 
   return metric;
 }
 
 void forza_free_metric(forza_metric_t* metric) {
-  free(metric->meta->app);
   free(metric->meta);
   free(metric);
 }
