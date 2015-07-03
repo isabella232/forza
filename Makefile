@@ -31,8 +31,6 @@ src/%.o: src/%.c include/forza-private/plugins.h
 src/plugins/%.o: src/plugins/%.c
 	gcc $(CFLAGS) -c $< -o $@
 
-src/plugins/start.o: libinterposed
-
 forza: $(OBJS)
 	gcc $^ deps/libuv/libuv.a deps/saneopt/libsaneopt.a deps/env/libenv.a $(LDFLAGS) $(CFLAGS) -o $@
 
@@ -44,14 +42,6 @@ libsaneopt:
 
 libenv:
 	$(MAKE) -C deps/env/
-
-ifeq (Darwin, $(uname_S))
-libinterposed: src/plugins/start/libinterposed.c
-	gcc $(INTERPOSED_CFLAGS) $(CFLAGS) -dynamiclib -o libinterposed.dylib $^
-else
-libinterposed: src/plugins/start/libinterposed.c
-	gcc $(INTERPOSED_CFLAGS) $(CFLAGS) -D_GNU_SOURCE -fPIC -shared -o libinterposed.so $^
-endif
 
 clean:
 	rm -f forza
