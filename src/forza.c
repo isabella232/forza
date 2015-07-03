@@ -166,9 +166,12 @@ void on_connect(int status) {
   }
 
   //
-  // We are connected to the monitoring server. Spawn our new process overlord.
+  // We are connected to the monitoring server. If a command was supplied,
+  // spawn a child process.
   //
-  spawn();
+  if (arguments != NULL) {
+    spawn();
+  }
 }
 
 void forza__kill() {
