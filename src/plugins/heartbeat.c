@@ -6,7 +6,7 @@ static uv_timer_t heartbeat_timer;
 void heartbeat__send(uv_timer_t *timer, int status) {
   forza_metric_t* metric = forza_new_metric();
 
-  metric->service = "health/process/heartbeat";
+  metric->service = "heartbeat";
   metric->metric = 1;
   forza_send(metric);
 
