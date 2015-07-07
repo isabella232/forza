@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -195,9 +196,7 @@ int main(int argc, char *argv[]) {
   char* name;
   char* port_str;
   int port;
-  int i, c, v = 0;
-  uv_interface_address_t* addresses;
-  uv_err_t err;
+  int v = 0;
 
   srand(time(NULL));
 
@@ -242,21 +241,11 @@ int main(int argc, char *argv[]) {
   }
 
   if (hostname == NULL) {
-    hostname = malloc(256 * sizeof(*hostname));
-    err = uv_interface_addresses(&addresses, &c);
-    if (err.code != UV_OK) {
-      fprintf(stderr, "uv_interface_addresses: %s\n", uv_err_name(uv_last_error(loop)));
-      return 1;
+    hostname = malloc((HOST_NAME_MAX + 1) * sizeof(*hostname));
+    if (gethostname(hostname, HOST_NAME_MAX) != 0) {
+      fprintf(stderr, "Failed to get a host name, provide one explicitely with --hostname");
+      return 4;
     }
-    for (i = 0; i < c; i++) {
-      /* For now, only grab the first non-internal, non 0.0.0.0 interface.
-       * TODO: Make this smarter.
-       */
-      if (addresses[i].is_internal) continue;
-      uv_ip4_name(&addresses[i].address.address4, hostname, 255 * sizeof(*hostname));
-      if (strcmp(hostname, "0.0.0.0") != 0) break;
-    }
-    uv_free_interface_addresses(addresses, c);
   }
 
   forza_connect(host, port, hostname, user, name, on_connect);
