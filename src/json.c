@@ -173,7 +173,7 @@ char* forza_json_stringify(forza_metric_t* metric) {
 
   if (metric->service) {
     str_buf = forza__json_stringify_string(metric->service);
-    forza__json_append(&json, "service", str_buf, 1);
+    forza__json_append(&json, "name", str_buf, 1);
     free(str_buf);
   }
 
