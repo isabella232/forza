@@ -30,7 +30,7 @@ struct forza_metric_meta {
 
 struct forza_metric {
   double metric;
-  int ttl;
+  unsigned long int ttl;
   time_t time;
   char* service;
   char* host;

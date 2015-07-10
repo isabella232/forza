@@ -158,6 +158,7 @@ forza_metric_t* forza_new_metric() {
   metric->service = NULL;
   metric->description = NULL;
   metric->host = hostname;
+  metric->ttl = (unsigned int) - 1;
 
   metric->meta->uptime = (long long int) - 1;
   metric->meta->port = (unsigned short) - 1;

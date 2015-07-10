@@ -156,6 +156,11 @@ char* forza_json_stringify(forza_metric_t* metric) {
     free(str_buf);
   }
 
+  if (metric->ttl != (unsigned int) - 1) {
+    snprintf(buf, sizeof(buf), "%lu", metric->ttl);
+    forza__json_append(&json, "ttl", buf, 1);
+  }
+
   str_buf = forza__json_stringify_meta(metric->meta);
   forza__json_append(&json, "meta", str_buf, 1);
   free(str_buf);
