@@ -10,6 +10,7 @@ void heartbeat__send(uv_timer_t *timer, int status) {
 
   metric->service = "heartbeat";
   metric->metric = 1;
+  metric->ttl = HEARTBEAT_INTERVAL;
   forza_send(metric);
 
   forza_free_metric(metric);
