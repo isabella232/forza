@@ -3,14 +3,15 @@
 
 static uv_timer_t heartbeat_timer;
 
-#define HEARTBEAT_INTERVAL 4000
+#define HEARTBEAT_TTL 4000
+#define HEARTBEAT_INTERVAL (HEARTBEAT_TTL - 500)
 
 void heartbeat__send(uv_timer_t *timer, int status) {
   forza_metric_t* metric = forza_new_metric();
 
   metric->service = "heartbeat";
   metric->metric = 1;
-  metric->ttl = HEARTBEAT_INTERVAL;
+  metric->ttl = HEARTBEAT_TTL;
   forza_send(metric);
 
   forza_free_metric(metric);
