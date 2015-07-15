@@ -3,6 +3,6 @@
 
 #include <forza.h>
 
-int mem_init(forza_plugin_t* plugin);
+int memory_init(forza_plugin_t* plugin);
 
 #endif
