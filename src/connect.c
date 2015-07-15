@@ -19,11 +19,20 @@ static int port;
 static char* app = NULL;
 
 void forza__reconnect(forza_connect_cb connect_cb);
+void forza__do_reconnect(forza_connect_cb connect_cb);
+void forza__on_reconnect_timer(uv_timer_t* timer, int status);
 void forza__on_connect(uv_connect_t* req, int status);
 void forza__reconnect_on_close(uv_handle_t* handle);
 void forza__reconnect_on_connect_error(uv_handle_t* handle);
 
 void forza__reconnect(forza_connect_cb connect_cb) {
+  uv_timer_t* reconnect_timer = malloc(sizeof(*reconnect_timer));
+  uv_timer_init(loop, reconnect_timer);
+  reconnect_timer->data = connect_cb;
+  uv_timer_start(reconnect_timer, forza__on_reconnect_timer, 1000, 0);
+}
+
+void forza__do_reconnect(forza_connect_cb connect_cb) {
   char addr_str[17] = {'\0'};
   int r;
 
@@ -62,6 +71,11 @@ void forza__reconnect(forza_connect_cb connect_cb) {
     forza__reconnect((forza_connect_cb) connect_req.data);
     return;
   }
+}
+
+void forza__on_reconnect_timer(uv_timer_t *timer, int status) {
+  forza__do_reconnect((forza_connect_cb) timer->data);
+  free(timer);
 }
 
 void forza_connect(char* host_, int port_, char* hostname_, char* app_, forza_connect_cb connect_cb) {
@@ -103,7 +117,7 @@ void forza_connect(char* host_, int port_, char* hostname_, char* app_, forza_co
     host = host->ai_next;
   }
 
-  forza__reconnect(connect_cb);
+  forza__do_reconnect(connect_cb);
 }
 
 void forza__on_connect(uv_connect_t* req, int status) {
