@@ -1,4 +1,5 @@
 #include <uv.h>
+#include <unistd.h>
 #include <forza.h>
 
 #ifdef __sun
@@ -22,6 +23,7 @@ void load_average__send(uv_timer_t *timer, int status) {
 #else
   uv_loadavg(loadinfo);
 #endif
+  metric->meta->nprocs = sysconf(_SC_NPROCESSORS_ONLN);
 
   metric->service = "load-average.1";
   metric->metric = loadinfo[0];

@@ -119,6 +119,11 @@ char* forza__json_stringify_meta(forza_metric_meta_t* meta) {
     free(str_buf);
   }
 
+  if (meta->nprocs != ((unsigned short) - 1)) {
+    snprintf(buf, sizeof(buf), "%hu", meta->nprocs);
+    forza__json_append(&json, "nprocs", buf, first++);
+  }
+
   json = realloc(json, strlen(json) + 2);
   strncat(json, "}", 1);
 

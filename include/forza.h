@@ -26,6 +26,7 @@ struct forza_metric_meta {
   long long uptime;
   unsigned short port;
   char* app;
+  unsigned short nprocs;
 } typedef forza_metric_meta_t;
 
 struct forza_metric {
