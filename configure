@@ -39,7 +39,7 @@ for plugin in plugins:
     plugins_h += '#include "../../src/plugins/' + plugin + '.h"\n'
 
 plugins_h += 'int (*_plugin_init_calls[PLUGIN_COUNT])(forza_plugin_t* plugin) = { '
-plugins_h += ', '.join(plugin + '_init' for plugin in plugins) + ' };\n'
+plugins_h += ', '.join(plugin.replace('-', '_') + '_init' for plugin in plugins) + ' };\n'
 plugins_h += '#endif\n'
 
 arch = args.interposed_dest_cpu or subprocess.check_output(['node', '-pe', 'process.arch']).strip()
