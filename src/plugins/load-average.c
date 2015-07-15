@@ -8,7 +8,7 @@
 
 static uv_timer_t cpu_timer;
 
-void cpu__send_usage(uv_timer_t *timer, int status) {
+void load_average__send(uv_timer_t *timer, int status) {
   double loadinfo[3];
   forza_metric_t* metric = forza_new_metric();
 
@@ -23,22 +23,30 @@ void cpu__send_usage(uv_timer_t *timer, int status) {
   uv_loadavg(loadinfo);
 #endif
 
-  metric->service = "health/machine/cpu";
+  metric->service = "load-average.1";
   metric->metric = loadinfo[0];
+  forza_send(metric);
+
+  metric->service = "load-average.5";
+  metric->metric = loadinfo[1];
+  forza_send(metric);
+
+  metric->service = "load-average.15";
+  metric->metric = loadinfo[2];
   forza_send(metric);
 
   forza_free_metric(metric);
 }
 
-void cpu__process_exit_cb(int exit_status, int term_signal) {
+void load_average__process_exit_cb(int exit_status, int term_signal) {
   uv_timer_stop(&cpu_timer);
 }
 
-int cpu_init(forza_plugin_t* plugin) {
-  plugin->process_exit_cb = cpu__process_exit_cb;
+int load_average_init(forza_plugin_t* plugin) {
+  plugin->process_exit_cb = load_average__process_exit_cb;
 
   uv_timer_init(uv_default_loop(), &cpu_timer);
-  uv_timer_start(&cpu_timer, cpu__send_usage, 0, 5000);
+  uv_timer_start(&cpu_timer, load_average__send, 0, 5000);
 
   return 0;
 }

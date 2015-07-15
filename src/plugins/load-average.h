@@ -3,6 +3,6 @@
 
 #include <forza.h>
 
-int cpu_init(forza_plugin_t* plugin);
+int load_average_init(forza_plugin_t* plugin);
 
 #endif
