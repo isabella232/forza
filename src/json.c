@@ -140,7 +140,7 @@ char* forza_json_stringify(forza_metric_t* metric) {
   json[1] = '\0';
 
   snprintf(buf, sizeof(buf), "%.8f", metric->metric);
-  forza__json_append(&json, "metric", buf, 0);
+  forza__json_append(&json, "value", buf, 0);
 
   snprintf(buf, sizeof(buf), "%lu", metric->time);
   forza__json_append(&json, "time", buf, 1);
