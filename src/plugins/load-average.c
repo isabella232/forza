@@ -25,15 +25,15 @@ void load_average__send(uv_timer_t *timer, int status) {
 #endif
   metric->meta->nprocs = sysconf(_SC_NPROCESSORS_ONLN);
 
-  metric->service = "load-average.1";
+  metric->service = "1.load-average";
   metric->metric = loadinfo[0];
   forza_send(metric);
 
-  metric->service = "load-average.5";
+  metric->service = "5.load-average";
   metric->metric = loadinfo[1];
   forza_send(metric);
 
-  metric->service = "load-average.15";
+  metric->service = "15.load-average";
   metric->metric = loadinfo[2];
   forza_send(metric);
 
