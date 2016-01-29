@@ -73,13 +73,10 @@ void memory__read_meminfo() {
 }
 
 void memory__send_usage(uv_timer_t *timer, int status) {
-  double mempct;
-
 #ifdef DEBUG
   printf("memory usage timer fired, status %d\n", status);
 #endif
   memory__read_meminfo();
-
 }
 
 void memory__process_exit_cb(int exit_status, int term_singal) {
