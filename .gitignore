@@ -4,3 +4,4 @@ forza
 config.mk
 include/forza-private/plugins.h
 node_modules
+target
