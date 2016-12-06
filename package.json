@@ -1,11 +1,11 @@
 {
-  "name": "forza",
-  "description": "A lightweight agent for Godot",
-  "version": "0.3.0",
-  "author": "Nodejitsu Inc <info@nodejitsu.com>",
+  "name": "@npm/forza",
+  "description": "A lightweight agent for anything that speaks JSON metrics",
+  "version": "1.1.1-1",
+  "author": "npm, Inc <support@npmjs.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/opsmezzo/forza.git"
+    "url": "https://github.com/npm/forza.git"
   },
   "devDependencies": {
     "json-stream": "0.2.x",
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "test/run",
-    "preinstall": "./build"
+    "prepublish": "cargo build --release && cp target/release/forza ."
   },
   "bin": {
     "forza": "forza"
