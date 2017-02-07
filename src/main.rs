@@ -40,6 +40,11 @@ fn main() {
     start_plugin(netstat);
   });
 
+  let processes = plugins::processes::Processes::new(emitter.clone());
+  thread::spawn(|| {
+    start_plugin(processes);
+  });
+
   let load_average = plugins::load_average::LoadAverage::new(emitter.clone());
   thread::spawn(|| {
     start_plugin(load_average);
