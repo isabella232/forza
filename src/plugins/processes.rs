@@ -13,20 +13,16 @@ impl<'a> Processes<'a> {
       emitter: emitter
     }
   }
-
-  fn send(&mut self) {
-    let stats = linux_stats::stat().unwrap();
-    self.emitter.emit("processes", stats.processes);
-    self.emitter.emit("processes.running", stats.procs_running);
-    self.emitter.emit("processes.blocked", stats.procs_blocked);
-  }
 }
 
 impl<'a> forza::ForzaPlugin for Processes<'a> {
   fn start(&mut self) {
     println!("starting processes plugin");
     forza::schedule_repeating(move || {
-      self.send();
+      let stats = linux_stats::stat().unwrap();
+      self.emitter.emit("processes", stats.processes);
+      self.emitter.emit("processes.running", stats.procs_running);
+      self.emitter.emit("processes.blocked", stats.procs_blocked);
     }, 10);
   }
 }
